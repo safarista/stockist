@@ -1,0 +1,58 @@
+<p>
+  <b>Plu:</b>
+  <%= @stock_item.plu %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @stock_item.description %>
+</p>
+
+<p>
+  <b>Style:</b>
+  <%= @stock_item.style %>
+</p>
+
+<p>
+  <b>Colour Name:</b>
+  <%= @stock_item.colour_name %>
+</p>
+
+<p>
+  <b>Size Name:</b>
+  <%= @stock_item.size_name %>
+</p>
+
+<p>
+  <b>Branch:</b>
+  <%= @stock_item.branch.name %>
+</p>
+
+<p>
+  <b>Stock quantity:</b>
+  <%= @stock_item.stock_quantity %>
+</p>
+
+<p>
+  <b>Min stock quantity:</b>
+  <%= @stock_item.min_stock_quantity %>
+</p>
+
+<p>
+  <b>Max stock quantity:</b>
+  <%= @stock_item.max_stock_quantity %>
+</p>
+
+<p>
+  <b>Root plu:</b>
+  <%= @stock_item.root_plu %>
+</p>
+
+<p>
+  <b>Base retail price:</b>
+  <%= number_to_currency @stock_item.bsretail_price, unit: '&pound;' %>
+</p>
+
+
+<%= link_to 'Edit', edit_stock_item_path(@stock_item) %> |
+<%= link_to 'Back', stock_items_path %>

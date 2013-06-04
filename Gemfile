@@ -7,7 +7,7 @@ gem 'rails', '3.2.13'
 
 gem 'sqlite3'
 gem 'thin'
-
+gem 'will_paginate'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -18,6 +18,8 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
+  gem "twitter-bootstrap-rails"
+  gem 'simple_form'
 end
 
 gem 'jquery-rails'
@@ -37,7 +39,7 @@ gem 'capistrano'
 # To use debugger
 # gem 'debugger'
 
-group :test do
+group :test, :development do
  gem 'rspec-rails'
  gem 'capybara'
  gem 'launchy'

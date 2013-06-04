@@ -1,0 +1,18 @@
+<div class="page-header">
+  <h1>UD Stores <small><%= link_to 'New Branch', new_branch_path, class: 'btn btn-small pull-right' %></small></h1>
+</div class="thumbnails">
+
+<ul class="thumbnails">
+<% @branches.each do |branch| %>
+    <li class="span3">
+      <div class="thumbnail">
+        <%= image_tag "#{branch.name.downcase.strip.gsub(/\s/, '-')}.png", alt: branch.name, title: branch.name, class: 'img_circle' %>
+        <h4><%= link_to branch.name, branch_path(branch), title: branch.name %></h4>
+      </div>
+    </li>
+<% end %>
+</ul>
+
+<br />
+
+
