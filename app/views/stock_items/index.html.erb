@@ -1,5 +1,5 @@
 <h1>Listing stock_items<small class="pull-right"><%= link_to 'New Stock item', new_stock_item_path, class: "btn btn-small" %></small></h1>
-<table class="table table-striped">
+<table class="table table-striped table-condensed">
   <colgroup>
     <col width="20%" />
     <col width="20%" />
@@ -23,14 +23,14 @@
 
 <% @stock_items.each do |stock_item| %>
   <tr>
-    <td><%= stock_item.plu %></td>
+    <td><%= link_to stock_item.plu, stock_item_path(stock_item) %></td>
     <td><%= stock_item.branch.name %></td>
     <td><%= stock_item.stock_quantity %></td>
     <td><%= stock_item.min_stock_quantity %></td>
     <td><%= stock_item.max_stock_quantity %></td>
     <td><%= stock_item.root_plu %></td>
-    <td><%= link_to 'Show', stock_item %> | <%= link_to 'Edit', edit_stock_item_path(stock_item) %></td>
-    <td><%= link_to 'Destroy', stock_item, class: 'btn', method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'View', stock_item%> | <%= link_to 'Edit', edit_stock_item_path(stock_item) %></td>
+    <td><%= link_to 'Destroy', stock_item, class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>
