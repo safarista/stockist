@@ -2,7 +2,7 @@ require "bundler/capistrano"
 
 server "192.168.2.19", :web, :app, :db, primary: true
 
-set :application, "uniDSpree"
+set :application, "stockist"
 set :user, "nelsonk"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
