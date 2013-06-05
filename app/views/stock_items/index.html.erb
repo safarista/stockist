@@ -29,8 +29,8 @@
     <td><%= stock_item.min_stock_quantity %></td>
     <td><%= stock_item.max_stock_quantity %></td>
     <td><%= stock_item.root_plu %></td>
-    <td><%= link_to 'View', stock_item%> | <%= link_to 'Edit', edit_stock_item_path(stock_item) %></td>
-    <td><%= link_to 'Destroy', stock_item, class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><span class="btn-group"><%= link_to 'View', stock_item, class: 'btn btn-mini' %> <%= link_to 'Edit', edit_stock_item_path(stock_item), class: 'btn btn-mini' %></span></td>
+    <td><%= link_to 'Delete', stock_item, class: 'btn btn-danger btn-mini', method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>
