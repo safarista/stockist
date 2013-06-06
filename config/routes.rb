@@ -1,7 +1,6 @@
 Stockist::Application.routes.draw do
   resources :stock_items
 
-
   resources :branches
 
 

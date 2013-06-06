@@ -6,39 +6,53 @@
   </small>
 </h3>
 
+<!-- Search Bar -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <%= form_tag(branch_path, method: :get, class: "navbar-search") do |f| %>
+      <div class="input-append">
+        <%= search_field_tag :search, params[:search], id: 'appendedInputButtons', class: 'span4', placeholder: 'Enter PLU' %>
+        <%= submit_tag 'Search', name: nil, class: 'btn' %>
+        <!-- <button class="btn" type="button">Search</button> -->
+      </div>
+    <% end %>
+  </div>
+</div>
+<!-- End Search Bar -->
+
 <table class="table table-striped">
   <colgroup>
+    <col width="5%" />
+    <col width="20%" />
     <col width="20%" />
     <col width="10%" />
-    <col width="20%" />
-    <col width="20%" />
-    <col width="20%" />
+    <col width="10%" />
     <col width="10%" />
   </colgroup>
   <thead>
     <tr>
-      <th>PLU</th>
+      <th>Root PLU</th>
+      <th>Style</th>
+      <th>Colour</th>
+      <th>Size</th>
       <th>Stock qty</th>
       <th>Min qty</th>
-      <th>Max qty</th>
-      <th>Root PLU</th>
-      <th>Base Price</th>
     </tr>
   </thead>
   <tbody>
     <% @stock.each do |item| %>
     <tr>
-      <td><%= link_to item.plu, stock_item_path(item) %></td>
+      <td><%= item.root_plu %></td>
+      <td><%= item.style %></td>
+      <td><%= item.colour_name %></td>
+      <td><%= item.size_name %></td>
       <td><%= item.stock_quantity %></td>
       <td><%= item.min_stock_quantity %></td>
-      <td><%= item.max_stock_quantity %></td>
-      <td><%= item.root_plu %></td>
-      <td><%= item.bsretail_price %></td>
     </tr>
     <% end %>
   </tbody>
 </table>
-<br>
+
 <%= will_paginate @stock %>
 <br>
 

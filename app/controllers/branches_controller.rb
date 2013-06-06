@@ -14,7 +14,7 @@ class BranchesController < ApplicationController
   # GET /branches/1.json
   def show
     @branch = Branch.find(params[:id])
-    @stock = @branch.stock_items.paginate(page: params[:page]).order('plu ASC')
+    @stock = @branch.stock_items.search(params[:search]).order('plu ASC').paginate(page: params[:page])
 
     respond_to do |format|
       format.html # show.html.erb

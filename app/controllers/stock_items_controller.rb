@@ -2,7 +2,7 @@ class StockItemsController < ApplicationController
   # GET /stock_items
   # GET /stock_items.json
   def index
-    @stock_items = StockItem.paginate(page: params[:page])
+    @stock_items = StockItem.search(params[:search]).order('plu ASC').paginate(page: params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

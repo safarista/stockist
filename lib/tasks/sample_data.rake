@@ -32,24 +32,46 @@ namespace :csv do
 
     products = products_csv.map { |p| [ p[1], p[2], p[3], p[4], p[7], p[11] ] }.uniq
     begin
+      puts "===Starting to seed Products-Export.csv Data into the database==="
+
       products.each do |p|
-        StockItem.where('root_plu = ?', p[0]).find_in_batches do |batch|
-          # sleep 2
-          batch.each do |product|
-            if product.plu == p[1].to_i
-              product.update_attributes({
-                              description: p[2],
-                              style: p[3],
-                              size_name: p[4],
-                              colour_name: p[5]}, without_protection: true
-                )
-            end
-          end
-        end
+        StockItem.find_or_create_by_plu({
+          plu: p[1],
+          root_plu: p[0],
+          branch_id: 1,
+          stock_quantity: 0,
+          description: p[2],
+          style: p[3],
+          size_name: p[4],
+          colour_name: p[5]
+          }, without_protection: true
+        )
       end
-      puts "CSV Data has been Added"
+      puts "Finished: CSV 'Products-Export' Data has been Added"
     rescue Exception => e
       puts "Errors were encountered: #{e.class} => #{e.message}"
     end
+
+    # begin
+    #   products.each do |p|
+    #     StockItem.where('root_plu = ?', p[0]).find_in_batches do |batch|
+    #       # sleep 2
+    #       batch.each do |product|
+    #         if product.plu == p[1].to_i
+    #           product.update_attributes({
+    #                           description: p[2],
+    #                           style: p[3],
+    #                           size_name: p[4],
+    #                           colour_name: p[5]}, without_protection: true
+    #             )
+    #         end
+    #       end
+    #     end
+    #   end
+    # puts "CSV 'Products-Export' Data has been updated"
+    # rescue Exception => e
+    #   puts "Errors were encountered: #{e.class} => #{e.message}"
+    # end
+
   end
 end
