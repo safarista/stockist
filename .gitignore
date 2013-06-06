@@ -15,5 +15,4 @@
 /tmp
 .ruby-gemset
 db/production.sqlite3
-db/development.sample.sqlite3
 db/development.sqlite3
