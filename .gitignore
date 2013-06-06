@@ -14,3 +14,4 @@
 /log/*.log
 /tmp
 .ruby-gemset
+db/production.sqlite3\ndb/development.sample.sqlite3\n
