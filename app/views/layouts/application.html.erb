@@ -16,6 +16,7 @@
 
     <!-- For all other devices -->
     <!-- Size should be 32 x 32 pixels -->
+    <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
   </head>
   <body>
 
@@ -42,7 +43,11 @@
     <div class="container">
         <div class="row">
           <div class="span12">
-            <%= bootstrap_flash %>
+            <% flash.each do |name, msg| %>
+              <div class="alert alert-<%= name %>">
+                  <%= msg %>
+              </div>
+            <% end %>
             <%= yield %>
           </div>
           <!-- <div class="span3">

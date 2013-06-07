@@ -6,7 +6,7 @@
 <% @branches.each do |branch| %>
     <li class="span3">
       <div class="thumbnail">
-        <%= image_tag "#{branch.name.downcase.strip.gsub(/\s/, '-')}.png", alt: branch.name, title: branch.name, class: 'img_circle' %>
+        <%= image_tag "UniformDirect-Logo.png", class: 'img_circle' %>
         <h4><%= link_to branch.name, branch_path(branch), title: branch.name %></h4>
       </div>
     </li>
