@@ -1,4 +1,5 @@
 require "bundler/capistrano"
+require "capistrano-rbenv"
 
 server "192.168.2.19", :web, :app, :db, primary: true
 
@@ -7,6 +8,8 @@ set :user, "nelsonk"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
+set :rbenv_ruby_version, "1.9.3-p392"
+set :rbenv_path, "$HOME/.rbenv"
 
 set :scm, :git
 set :repository,  "https://github.com/safarista/#{application}.git"
