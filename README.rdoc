@@ -1,2 +1,17 @@
 Stopper
 =========
+
+UPDATE branchstock SET branchstock.STOCK_QUANTITY=5, branchstock.MIN_STOCK_QUANTITY=4 FROM branchstock WHERE branchstock.BRANCH_NAME='WAREHOUSE' AND branchstock.PLU='100';
+
+--------------------------------
+item.plu = item.plu.to_s.rjust(10, "0")
+item.root_plu = item.root_plu.to_s.rjust(8, "0")
+
+item_values = [ item.plu, "#{item.branch_name}", item.branch_id, item.stock_quantity, item.min_stock_quantity, item.max_stock_quantity, item.barcodes_quantity, item.root_plu, item.bsretail_price ]
+
+IF (SELECT * FROM branchstock WHERE branchstock.BRANCH_NAME='#{item.branch.name}' AND branchstock.PLU='#{item.plu}' AND branchstock.ROOT_PLU='#{item.root_plu}'
+THEN
+UPDATE branchstock SET branchstock.STOCK_QUANTITY=5, branchstock.MIN_STOCK_QUANTITY=4
+ELSE
+INSERT INTO branchstock (#{item_values}));
+--------------------------------

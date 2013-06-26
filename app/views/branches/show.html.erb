@@ -1,8 +1,7 @@
 <h3>
-  Branch:
-  <%= @branch.name %>
-  <small class="pull-right btn">
-    <%= link_to 'Edit', edit_branch_path(@branch) %> | <%= link_to 'Back', branches_path %>
+  <%= @branch.name %> Stock
+  <small class="pull-right btn-group">
+    <%= link_to 'Back', branches_path, class: 'btn' %><%= link_to 'Finish Product Updating', rename_file_stock_items_path(branch_id: @branch.id), method: :post, class: 'btn btn-success' %>
   </small>
 </h3>
 
@@ -11,7 +10,7 @@
   <div class="navbar-inner">
     <%= form_tag(branch_path, method: :get, class: "navbar-search") do |f| %>
       <div class="input-append">
-        <%= search_field_tag :search, params[:search], id: 'appendedInputButtons', class: 'span4', placeholder: 'Enter PLU' %>
+        <%= search_field_tag :search, params[:search], id: 'appendedInputButtons', class: 'span4', placeholder: 'Enter PLU or ROOT_PLU' %>
         <%= submit_tag 'Search', name: nil, class: 'btn' %>
         <!-- <button class="btn" type="button">Search</button> -->
       </div>
@@ -20,39 +19,60 @@
 </div>
 <!-- End Search Bar -->
 
-<table class="table table-striped">
-  <colgroup>
-    <col width="5%" />
-    <col width="20%" />
-    <col width="20%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="10%" />
-  </colgroup>
-  <thead>
-    <tr>
-      <th>Root PLU</th>
-      <th>Style</th>
-      <th>Colour</th>
-      <th>Size</th>
-      <th>Stock qty</th>
-      <th>Min qty</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @stock.each do |item| %>
-    <tr>
-      <td><%= item.root_plu %></td>
-      <td><%= item.style %></td>
-      <td><%= item.colour_name %></td>
-      <td><%= item.size_name %></td>
-      <td><%= item.stock_quantity %></td>
-      <td><%= item.min_stock_quantity %></td>
-    </tr>
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#home">Products</a></li>
+  <li><a href="#profile">Downlodable Files</a></li>
+</ul>
+<!-- End Tabs -->
+<div class="tab-content">
+  <div class="tab-pane active" id="home">
+    <%= form_tag(update_individual_stock_items_path, method: :put) do %>
+      <table class="table table-striped">
+        <colgroup>
+          <col width="10%" />
+          <col width="30%" />
+          <col width="20%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Root PLU</th>
+            <th>Style</th>
+            <th>Colour</th>
+            <th>Size</th>
+            <th>Stock qty</th>
+            <th>Min qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for item in @stock do %>
+            <%= fields_for 'stock_items[]', item do |f| %>
+              <tr>
+                <td><%= item.root_plu %> | <%= item.plu %> <%= f.hidden_field 'id', value: item.id %></td>
+                <td><%= item.style %></td>
+                <td><%= item.colour_name %></td>
+                <td><%= item.size_name %></td>
+                <td><%= f.number_field :stock_quantity, class: 'span2' %></td>
+                <td><%= f.number_field :min_stock_quantity, class: 'span2' %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+        <tfoot><tr><td colspan="6"><%= submit_tag 'Save Changes', class: 'but btn-primary' %></td></tr></tfoot>
+      </table>
     <% end %>
-  </tbody>
-</table>
 
-<%= will_paginate @stock %>
-<br>
+    <%= will_paginate @stock %>
+  </div>
 
+  <div class="tab-pane" id="profile">
+    <ul class="nav nav-list">
+      <% Dir.glob("#{Dir.pwd}/public/#{@branch.name.downcase}*.sql") do |file| filo = File.basename(file) %>
+
+      <li><%= link_to filo, root_url + filo %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

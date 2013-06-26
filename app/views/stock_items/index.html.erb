@@ -1,11 +1,11 @@
-<h1>Listing stock_items<small class="pull-right"><%= link_to 'New Stock item', new_stock_item_path, class: "btn btn-small" %></small></h1>
+<h1>All Stock Items<small class="pull-right"><%= link_to 'New Stock item', new_stock_item_path, class: "btn btn-small" %></small></h1>
 
 <!-- Search Bar -->
 <div class="navbar">
   <div class="navbar-inner">
     <%= form_tag(stock_items_path, method: :get, class: "navbar-search") do |f| %>
       <div class="input-append">
-        <%= search_field_tag :search, params[:search], id: 'appendedInputButtons', class: 'span4', placeholder: 'Enter PLU' %>
+        <%= search_field_tag :search, params[:search], id: 'appendedInputButtons', class: 'span4', placeholder: 'Enter PLU or ROOT_PLU' %>
         <%= submit_tag 'Search', name: nil, class: 'btn' %>
         <!-- <button class="btn" type="button">Search</button> -->
       </div>
@@ -15,40 +15,97 @@
 <!-- End Search Bar -->
 
 
-<table class="table table-striped table-condensed">
-  <colgroup>
-    <col width="20%" />
-    <col width="20%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="10%" />
-  </colgroup>
-  <tr>
-    <th>Plu</th>
-    <th>Branch</th>
-    <th>Stock QTY</th>
-    <th>Min stock </th>
-    <th>Max stock </th>
-    <th>Root plu</th>
-    <th colspan="2">Actions</th>
-  </tr>
+<%= form_tag(update_individual_stock_items_path, method: :put) do %>
+  <table class="table table-striped table-condensed">
+    <colgroup>
+      <col width="5%" />
+      <col width="5%" />
+      <col width="10%" />
+      <col width="5%" />
+      <col width="5%" />
+      <col width="10%" />
+      <col width="10%" />
+    </colgroup>
+    <tr>
+      <th>Root plu</th>
+      <th>Plu</th>
+      <th>Branch</th>
+      <th>Stock QTY</th>
+      <th>Min stock </th>
+      <th>Actions</th>
+    </tr>
 
-<% @stock_items.each do |stock_item| %>
-  <tr>
-    <td><%= link_to stock_item.plu, stock_item_path(stock_item) %></td>
-    <td><%= stock_item.branch.name %></td>
-    <td><%= stock_item.stock_quantity %></td>
-    <td><%= stock_item.min_stock_quantity %></td>
-    <td><%= stock_item.max_stock_quantity %></td>
-    <td><%= stock_item.root_plu %></td>
-    <td><span class="btn-group"><%= link_to 'View', stock_item, class: 'btn btn-mini' %> <%= link_to 'Edit', edit_stock_item_path(stock_item), class: 'btn btn-mini' %></span></td>
-    <td><%= link_to 'Delete', stock_item, class: 'btn btn-danger btn-mini', method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+    <% for stock_item in @stock_items do %>
+      <%= fields_for "stock_items[]", stock_item  do |f| %>
+        <tr>
+          <td><%= stock_item.root_plu %></td>
+          <td><%= link_to stock_item.plu, edit_stock_item_path(stock_item) %></td>
+          <td><%= stock_item.branch.name %></td>
+          <td><%= stock_item.stock_quantity %></td>
+          <td><%= stock_item.min_stock_quantity %></td>
+          <td><span class="btn-group"><%= link_to 'View', stock_item, class: 'btn btn-mini' %> <%= link_to 'Edit', edit_stock_item_path(stock_item), class: 'btn btn-mini' %></span></td>
+
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+  <div class="form-actions">
+    <!-- <%= submit_tag 'Save Changes', class: 'btn btn-primary' %> -->
+  </div>
 <% end %>
-</table>
 
-<br />
 <%= will_paginate @stock_items %>
+
+<!--
+If you intend to be in St. Helena for more than six months and work, you will generally require a <a href="/long-term-entry-permi">Long Term Entry Permit.</a>
+
+You will also require a <a href="http://www.sainthelena.gov.sh/pages/work-permit-.html">work permit </a>if you intend to work in a self employed capacity or your employer will need an <a href="http://www.sainthelena.gov.sh/pages/immigrant-employment-certificate-.html">Immigrant Employment Certificate.</a>  In either case you will also need to pass a points based system assessment.
+
+These pages will help you complete your points based system assessment.  Please follow one of the links below:
+<h3>Points Based System - Entrepreneur / Investor</h3>
+This is for single entrepreneurs or investors or partnerships of no more than two. For people who wish to invest more than £50,000 into a business in St. Helena.
+
+As a minimum, to pass the Points Based Assessment under the Entrepreneur/ Investor category you must:
+<ul>
+  <li>Intend to invest at least £50,000 (excluding own accommodation and maintenance)</li>
+  <li>Submit a business plan for your proposed investment covering the first five years.</li>
+</ul>
+You should submit the Points Based System Assessment <a href="http://www.sainthelena.gov.sh/data/files/form_o1_entrepreneur_investor.pdf">Entrepreneur / Investor form</a> and business plan with your application for a <a href="http://www.sainthelena.gov.sh/data/files/form_o__application_for_work_permit.pdf">work permit </a>and <a href="http://www.sainthelena.gov.sh/data/files/form_f_long_term_entry_permit.pdf">Long Term Entry Permit</a> to the Secretary of the Immigration Control Board at cofcouncils@sainthelena.gov.sh.
+<h3>Points Based System - Working Migrant (Self Employed)</h3>
+This route is for persons who wish to work in St. Helena in a self-employed capacity.
+
+If you intend to work in Saint Helena in a self employed capacity you should complete the Points Based System <a href="http://www.sainthelena.gov.sh/data/files/form_o2_pbs_self_employed_21.03.12.pdf">self-employed form</a> and submit with your application for a <a href="http://www.sainthelena.gov.sh/data/files/form_o__application_for_work_permit.pdf">Work Permit </a>and a <a href="http://www.sainthelena.gov.sh/data/files/form_f_long_term_entry_permit.pdf">Long Term Entry Permit </a>to the Secretary of the Immigration Control Board at cofcouncils@sainthelena.gov.sh.
+
+You will need to refer to the <a href="http://www.sainthelena.gov.sh/pages/assessment-tools-and-application-forms-.html">assessment tools</a> page to help you answer some of the questions.
+<h3>Points Based System - Working Migrant (Employed)</h3>
+This route is for persons who wish to work in St. Helena for an organisation which is either based in or has an interest in St. Helena.
+
+If you have been offered a job with an organisation, you should complete  the Points Based System<a href="http://www.sainthelena.gov.sh/data/files/form_q1_pbs_working_migrant_employed_20.03.12.pdf"> working migrant, employed form</a> and submit this along with any <a href="http://www.sainthelena.gov.sh/data/files/form_f_long_term_entry_permit.pdf">Long Term Entry Permit </a>and a copy of your employer's <a href="http://www.sainthelena.gov.sh/pages/immigrant-employment-certificate-.html">Immigrant Employment Certificate</a> to the Secretary of the Immigration Control Board cofcouncils@sainthelena.gov.sh.
+
+You will need to refer to the <a href="http://www.sainthelena.gov.sh/pages/assessment-tools-and-application-forms-.html">assessment tools page </a>to help you answer some of the questions.
+<h3>Points Based System - Assessment Tools and Application Forms</h3>
+<h4>Assessment Tools</h4>
+You will need the following tools to help you complete the Points Based Assessment Forms as a Entrepreneur / Investor or Working Migrant
+
+<a href="http://www.sainthelena.gov.sh/pages/english-language-exempt-countries-list-.html">English language exempt countries list</a>
+
+You will need the following tools to help you complete the Points Based Assessment Forms as a Working Migrant
+
+<a href="http://www.sainthelena.gov.sh/pages/shortage-occupation-list-.html">Shortage Occupation List</a>
+
+<a href="http://www.sainthelena.gov.sh/data/files/earnings_conversion_tool_2012.xlsx">Earnings conversion calculator</a>
+<h4>Forms</h4>
+The links below will take you to the forms that you need depending on your employment category.  Remember that in addition to a Points Based Assessment you will need a Long Term Entry Permit and if you are self employed you will need a Work Permit.  If you are working for a person or business based in St. Helena, your employer will need an Immigrant Employment Certificate.
+
+<a href="http://www.sainthelena.gov.sh/data/files/form_o1_entrepreneur_investor.pdf">FORM Points Based System - Entrepreneur / Investor</a>
+
+For people who wish to invest more than £50,000 into a business in St. Helena
+
+<a href="http://www.sainthelena.gov.sh/data/files/form_o2_pbs_self_employed_21.03.12.pdf">FORM Points Based System - Working migrant (Self - Employed)</a>
+
+For people who want to work in a self employed capacity in St. Helena
+
+<a href="http://www.sainthelena.gov.sh/data/files/form_q1_pbs_working_migrant_employed_20.03.12.pdf">FORM Points Based System - Working migrant (Employed)</a>
+
+For people who want to work for a person or business in St. Helena
+ -->

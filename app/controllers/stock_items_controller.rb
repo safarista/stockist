@@ -1,3 +1,5 @@
+require "find"
+
 class StockItemsController < ApplicationController
   # GET /stock_items
   # GET /stock_items.json
@@ -80,4 +82,57 @@ class StockItemsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def rename_file
+    branch = Branch.find(params[:branch_id]).name.to_s.downcase.gsub(/[^a-z]/, '_')
+    old_file = File.join("#{Dir.pwd}/public/", "#{branch}.sql")
+
+    if File.exists?(old_file)
+      File.rename(old_file, old_file + "-#{Time.now.strftime('%Y%m%d%H%M%S')}.sql")
+      redirect_to :back, notice: "File has been saved as with a timestamp. Download the file."
+    else
+      flash[:error] = "No such file was found :(. Try updating some records."
+      redirect_to :back
+    end
+  end
+
+  def update_individual
+    # binding.pry
+    items = params[:stock_items].keys.map { |i| i.to_i }
+    @stock_items = StockItem.update(params[:stock_items].keys, params[:stock_items].values).reject { |p| p.errors.empty? }
+
+  StockItem.find( items ).each do |item|
+    filoname = item.branch.name.to_s.downcase.gsub(/[^a-z]/, '_')
+
+    File.open("#{Dir.pwd}/public/#{filoname}.sql", "a") do |f|
+        pluo = item.plu.to_s.rjust(10, "0")
+        rootplu = item.root_plu.to_s.rjust(8, "0")
+        item_values = [ pluo, "#{item.branch.name}", item.branch.the_branch, item.stock_quantity ? item.stock_quantity : 0, item.min_stock_quantity ? item.min_stock_quantity : 0, 0, 0, rootplu, 0.0 ]
+
+        if item.created_at <= Time.parse('Tue, 18 Jun 2013 12:07:52 UTC +00:00') && item.updated_at + 30.seconds > Time.now
+          f.write %Q{UPDATE branchstock
+SET branchstock.STOCK_QUANTITY=#{item.stock_quantity}, branchstock.MIN_STOCK_QUANTITY=#{item.min_stock_quantity}
+FROM branchstock
+WHERE branchstock.BRANCH_NAME='#{item.branch.name}' AND branchstock.PLU='#{pluo}' AND branchstock.ROOT_PLU='#{rootplu}';\n\n}
+        elsif item.created_at > Time.parse('Tue, 18 Jun 2013 12:07:52 UTC +00:00') && item.updated_at + 30.seconds > Time.now
+          q = %Q{INSERT INTO 'branchstock' (PLU,BRANCH_NAME,BRANCH_ID,STOCK_QUANTITY,MIN_STOCK_QUANTITY,MAX_STOCK_QUANTITY,BARCODES_QUANTITY,ROOT_PLU,BSRETAIL_PRICE)
+VALUES(#{item_values});\n\n}.gsub(/(\[|\])/m, '')
+          f.write q
+        end
+
+        # f.write  "UPDATE branchstock SET branchstock.STOCK_QUANTITY=#{item.stock_quantity}, branchstock.MIN_STOCK_QUANTITY=#{item.min_stock_quantity} FROM branchstock WHERE branchstock.BRANCH_NAME='#{item.branch.name}' AND branchstock.PLU='#{item.plu}';\n" if item.updated_at + 30.seconds > Time.now
+      end
+    end
+    if @stock_items.empty?
+      flash[:notice] = "Products updated. "
+      redirect_to :back
+    else
+      flash[:notice] = "There were errors: #{e.class} => #{e.message}"
+      render :action => "edit_individual"
+    end
+
+    # @stock_items = StockItem.update(params[:stock_items].keys, params[:stock_items].values).reject { |p| p.errors.empty? }
+    # branch = Branch.find(:first, params[:id])
+  end
+
 end

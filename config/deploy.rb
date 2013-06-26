@@ -10,6 +10,7 @@ set :deploy_via, :remote_cache
 set :use_sudo, false
 set :rbenv_ruby_version, "1.9.3-p392"
 set :rbenv_path, "$HOME/.rbenv"
+set :rbenv_setup_default_environment, RBENV_ROOT
 
 set :scm, :git
 set :repository,  "https://github.com/safarista/#{application}.git"

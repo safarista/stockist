@@ -1,5 +1,11 @@
 Stockist::Application.routes.draw do
-  resources :stock_items
+  resources :stock_items do
+    collection do
+      post 'edit_individual'
+      put 'update_individual'
+      post 'rename_file'
+    end
+  end
 
   resources :branches
 

@@ -14,3 +14,18 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require_tree .
+
+
+$(document).ready(function() {
+  $('input[type=number]').on('focus', function() {
+    if ( this.value === '') {
+      this.value = '0';
+    }
+  });
+
+  $('#myTab a').click(function (e) {
+    // $('#myTab a:last').tab('show');
+    e.preventDefault();
+    $(this).tab('show');
+  });
+});
