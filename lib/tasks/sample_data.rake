@@ -26,8 +26,7 @@ namespace :csv do
       sto_items.each do |i|
         b = Branch.find_by_name(i[2])
         if b
-          StockItem.create({
-            the_branch: i[0],
+          StockItem.find_or_create_by_plu({
             plu: i[1],
             branch_id: b.id,
             stock_quantity: i[4],
