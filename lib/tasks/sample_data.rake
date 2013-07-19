@@ -19,7 +19,7 @@ namespace :csv do
     end
   end
 
-  desc "Import Branch Stock"
+  desc "Import Stock Items"
   task :import_branch_stock => :environment do
     begin
       sto_items = entries.map { |si| [ si[0], si[1], si[2], si[3], si[4], si[5], si[6], si[7], si[8], si[9], si[10] ] }.uniq
@@ -56,26 +56,6 @@ namespace :csv do
 
   desc "Import Products descriptions"
   task :import_product_info => :environment do
-#     # begin
-#     #   puts "===Starting to seed Products-Export.csv Data into the database==="
-#     #   products.each do |p|
-#     #     StockItem.find_or_create_by_plu({
-#     #       plu: p[1],
-#     #       root_plu: p[0],
-#     #       branch_id: 1,
-#     #       stock_quantity: 0,
-#     #       description: p[2],
-#     #       style: p[3],
-#     #       size_name: p[4],
-#     #       colour_name: p[5]
-#     #       }, without_protection: true
-#     #     )
-#     #   end
-#     #   puts "Finished: CSV 'Products-Export' Data has been Added"
-#     # rescue Exception => e
-#     #   puts "Errors were encountered: #{e.class} => #{e.message}"
-#     # end
-
     begin
       products.each do |p|
         StockItem.where('root_plu = ?', p[0]).find_in_batches do |batch|
@@ -101,14 +81,14 @@ namespace :csv do
   end
 
   desc "Create or update stock_items"
-  task :crate_or_update_stock => :environment do
+  task :create_or_update_stock => :environment do
 
     # Find a stock_item
     # if it exists and update its min_stock_quantity = 0
     # if not create it
     branches = Branch.all
     begin
-      puts 'Importing products has started'
+      puts 'STARTED: Update or create imported products'
 
       for branch in branches do
         products.each do |p|
@@ -127,7 +107,7 @@ namespace :csv do
           end.save!
         end
       end
-      puts 'Importing products has completed successfully'
+      puts 'FINISHED: Update or create imported products completed successfully'
     rescue Exception => e
       puts "Errors were encountered: #{e.class} => #{e.message}"
     end

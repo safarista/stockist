@@ -12,9 +12,16 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
 //= require_tree .
 
+(function() {
+  jQuery(function() {
+    $("a[rel=popover]").popover();
+    $(".tooltip").tooltip();
+    return $("a[rel=tooltip]").tooltip();
+  });
+
+}).call(this);
 
 $(document).ready(function() {
   $('input[type=number]').on('focus', function() {

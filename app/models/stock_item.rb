@@ -6,7 +6,7 @@ class StockItem < ActiveRecord::Base
 
   def self.search(search)
     if search
-      where('plu LIKE ? OR root_plu LIKE ?', "#{search}", "#{search}")
+      where('stock_items.plu = ? OR stock_items.root_plu = ?', "#{search}", "#{search}")
     else
       scoped
     end

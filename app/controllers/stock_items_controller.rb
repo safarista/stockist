@@ -4,7 +4,7 @@ class StockItemsController < ApplicationController
   # GET /stock_items
   # GET /stock_items.json
   def index
-    @stock_items = StockItem.search(params[:search]).order('plu ASC').paginate(page: params[:page])
+    @stock_items = StockItem.search(params[:search]).order('stock_items.plu ASC').paginate(page: params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -109,12 +109,12 @@ class StockItemsController < ApplicationController
         rootplu = item.root_plu.to_s.rjust(8, "0")
         item_values = [ pluo, "#{item.branch.name}", item.branch.the_branch, item.stock_quantity ? item.stock_quantity : 0, item.min_stock_quantity ? item.min_stock_quantity : 0, 0, 0, rootplu, 0.0 ]
 
-        if item.created_at <= Time.parse('Tue, 18 Jun 2013 12:07:52 UTC +00:00') && item.updated_at + 30.seconds > Time.now
+        if item.created_at <= Time.parse('2013-07-19 11:55:25') && item.updated_at + 30.seconds > Time.now
           f.write %Q{UPDATE branchstock
 SET branchstock.STOCK_QUANTITY=#{item.stock_quantity}, branchstock.MIN_STOCK_QUANTITY=#{item.min_stock_quantity}
 FROM branchstock
 WHERE branchstock.BRANCH_NAME='#{item.branch.name}' AND branchstock.PLU='#{pluo}' AND branchstock.ROOT_PLU='#{rootplu}';\n\n}
-        elsif item.created_at > Time.parse('Tue, 18 Jun 2013 12:07:52 UTC +00:00') && item.updated_at + 30.seconds > Time.now
+        elsif item.created_at > Time.parse('2013-07-19 11:55:25') && item.updated_at + 30.seconds > Time.now
           q = %Q{INSERT INTO 'branchstock' (PLU,BRANCH_NAME,BRANCH_ID,STOCK_QUANTITY,MIN_STOCK_QUANTITY,MAX_STOCK_QUANTITY,BARCODES_QUANTITY,ROOT_PLU,BSRETAIL_PRICE)
 VALUES(#{item_values});\n\n}.gsub(/(\[|\])/m, '')
           f.write q
